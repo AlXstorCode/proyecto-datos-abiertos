@@ -1,0 +1,414 @@
+/* ==========================================================================
+   Panel de Datos Abiertos - Hoja de Estilos CSS Autocontenida (styles.css)
+   Modo Oscuro (#051424 / #010f1f) con Acentos Violeta (#8b5cf6)
+   Sin dependencias externas ni fuentes remotas obligatorias
+   ========================================================================== */
+
+:root {
+  --color-surface-dim: #051424;
+  --color-surface: #0a192f;
+  --color-surface-bright: #1b2a40;
+  --color-surface-container-low: #081628;
+  --color-surface-container: #0d1e35;
+  --color-surface-container-high: #132640;
+  --color-surface-container-highest: #1a3050;
+  
+  --color-primary: #8b5cf6;
+  --color-primary-light: #a78bfa;
+  --color-primary-dark: #6d28d9;
+  
+  --color-text-main: #f1f5f9;
+  --color-text-muted: #94a3b8;
+  --color-text-dim: #64748b;
+  
+  --color-border: rgba(148, 163, 184, 0.12);
+  --color-border-subtle: rgba(148, 163, 184, 0.08);
+
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+}
+
+/* Reset y base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-surface-dim);
+  color: var(--color-text-main);
+  font-family: var(--font-family);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  line-height: 1.5;
+}
+
+/* Contenedor principal de la tabla */
+.table-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  background-color: var(--color-surface-container-low);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 32px -4px rgba(1, 15, 31, 0.6);
+  overflow: hidden;
+}
+
+/* Barra superior de la tabla / Metadata */
+.table-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background-color: var(--color-surface-container);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table-header-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  letter-spacing: -0.01em;
+}
+
+.table-header-title svg {
+  color: var(--color-primary);
+  width: 18px;
+  height: 18px;
+}
+
+.table-header-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-sm);
+  background-color: rgba(139, 92, 246, 0.12);
+  color: var(--color-primary-light);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+/* Estructura responsiva de la tabla */
+.data-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+/* Encabezados de columna */
+.data-table thead th {
+  background-color: var(--color-surface-container-high);
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.875rem 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.data-table thead th.text-right {
+  text-align: right;
+}
+
+/* Filas y celdas */
+.data-table tbody tr {
+  border-bottom: 1px solid var(--color-border-subtle);
+  transition: background-color 0.15s ease-in-out;
+}
+
+.data-table tbody tr:hover {
+  background-color: rgba(139, 92, 246, 0.04);
+}
+
+.data-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.data-table tbody td {
+  padding: 1rem 1.25rem;
+  color: var(--color-text-main);
+  vertical-align: middle;
+}
+
+.data-table tbody td.text-right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+/* Badges para el formato de trimestres en filas dinámicas */
+.badge-quarter {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  background-color: rgba(139, 92, 246, 0.15);
+  color: var(--color-primary-light);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Estado vacío inicial (Empty State) */
+.empty-state-cell {
+  text-align: center;
+  padding: 4.5rem 1.5rem !important;
+  color: var(--color-text-dim);
+}
+
+.empty-state-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.empty-state-icon {
+  width: 40px;
+  height: 40px;
+  color: var(--color-text-dim);
+  opacity: 0.5;
+}
+
+.empty-state-text {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.empty-state-subtext {
+  font-size: 0.8125rem;
+  color: var(--color-text-dim);
+}
+
+/* Barra inferior de la tabla (Footer / Telemetría) */
+.table-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.5rem;
+  background-color: var(--color-surface-container);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.75rem;
+  color: var(--color-text-dim);
+}
+
+.sync-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-indicator-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  box-shadow: 0 0 8px var(--color-primary);
+}
+
+.telemetry-status {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.table-header-actions button[form="form-filtros"] {
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: #0f172a;
+  background-color: #38bdf8;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.table-header-actions button[form="form-filtros"]:hover {
+  background-color: #7dd3fc;
+}
+
+.table-header-actions button[form="form-filtros"]:active {
+  transform: scale(0.98);
+}
+
+.table-header-actions .limpiar {
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  font-family: inherit;
+  color: #cbd5e1;
+  text-decoration: none;
+  background-color: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 6px;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.table-header-actions .limpiar:hover {
+  color: #f8fafc;
+  background-color: rgba(51, 65, 85, 0.95);
+  border-color: rgba(148, 163, 184, 0.55);
+}
+.data-table thead tr.filter-row th {
+  padding: 6px 8px;
+  background-color: rgba(15, 23, 42, 0.85);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.data-table thead tr.filter-row input[form="form-filtros"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  font-size: 0.82rem;
+  font-family: inherit;
+  color: #f1f5f9;
+  background-color: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.data-table thead tr.filter-row input[form="form-filtros"]::placeholder {
+  color: #94a3b8;
+  font-size: 0.78rem;
+}
+
+.data-table thead tr.filter-row input[form="form-filtros"]:hover {
+  border-color: rgba(148, 163, 184, 0.55);
+  background-color: rgba(30, 41, 59, 1);
+}
+
+.data-table thead tr.filter-row input[form="form-filtros"]:focus {
+  border-color: #38bdf8;
+  background-color: #0f172a;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.22);
+}
+/* ==========================================================================
+   Agregado en la tarea 5.2: botón Sincronizar, mensajes flash y resumen.
+   Reemplaza los style="..." que antes estaban escritos dentro del HTML.
+   ========================================================================== */
+
+/* La barra superior pasa a otra línea si la ventana es angosta */
+.table-header-bar {
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Contenedor de los botones de la barra superior */
+.table-header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Botón "Sincronizar con la API" (color principal del tema: violeta) */
+.table-header-actions form button {
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: #ffffff;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.table-header-actions form button:hover {
+  background-color: var(--color-primary-light);
+}
+
+.table-header-actions form button:active {
+  transform: scale(0.98);
+}
+
+/* Mensajes flash: verde si salió bien ("exito"), rojo si hubo error ("error") */
+.mensajes-flash {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem 0;
+}
+
+.alerta {
+  padding: 0.625rem 1rem;
+  font-size: 0.85rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+}
+
+.alerta-exito {
+  color: #86efac;
+  background-color: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.35);
+}
+
+.alerta-error {
+  color: #fca5a5;
+  background-color: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+/* Resumen numérico: tres tarjetas en fila (se acomodan solas si no caben) */
+.resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.resumen-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.875rem 1rem;
+  background-color: var(--color-surface-container);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.resumen-etiqueta {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.resumen-valor {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Filtros de las columnas 5 y 6 (tráfico): texto alineado a la derecha, como los números */
+.data-table thead tr.filter-row th:nth-child(5) input,
+.data-table thead tr.filter-row th:nth-child(6) input {
+  text-align: right;
+}

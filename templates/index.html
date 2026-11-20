@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datos Abiertos - Tráfico de voz</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+  <link rel="icon" href="data:,">
+</head>
+<body>
+
+  <div class="table-wrapper">
+
+    <!-- Barra superior -->
+    <div class="table-header-bar">
+      <div class="table-header-title">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="2"></circle>
+          <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path>
+        </svg>
+        <span>Tráfico de voz de proveedores móviles (MinTIC)</span>
+      </div>
+
+      <div class="table-header-actions">
+        <form method="post" action="{{ url_for('sincronizar') }}">
+          <button type="submit">Sincronizar con la API</button>
+        </form>
+        <button type="submit" form="form-filtros">Filtrar</button>
+        {% if filtros.values()|select|list %}
+          <a href="{{ url_for('inicio') }}" class="limpiar">Limpiar filtros</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Mensajes flash -->
+    {% with mensajes = get_flashed_messages(with_categories=true) %}
+      {% if mensajes %}
+        <div class="mensajes-flash">
+          {% for categoria, mensaje in mensajes %}
+            <div class="alerta alerta-{{ categoria }}">{{ mensaje }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="resumen">
+      <div class="resumen-item">
+        <span class="resumen-etiqueta">Total de registros</span>
+        <span class="resumen-valor">{{ "{:,}".format(resumen.total).replace(",", ".") }}</span>
+      </div>
+      <div class="resumen-item">
+        <span class="resumen-etiqueta">Tráfico prepago (min)</span>
+        <span class="resumen-valor">{{ "{:,}".format(resumen.suma_prepago).replace(",", ".") }}</span>
+      </div>
+      <div class="resumen-item">
+        <span class="resumen-etiqueta">Tráfico pospago (min)</span>
+        <span class="resumen-valor">{{ "{:,}".format(resumen.suma_pospago).replace(",", ".") }}</span>
+      </div>
+    </div>
+
+    <!-- Formulario que envuelve los filtros de cada columna -->
+    <form id="form-filtros" method="GET" action="{{ url_for('inicio') }}"></form>
+
+    <div class="data-table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Año</th>
+            <th>Trimestre</th>
+            <th>Proveedor</th>
+            <th>Proveedor Destino</th>
+            <th class="text-right">Tráfico Prepago</th>
+            <th class="text-right">Tráfico Pospago</th>
+          </tr>
+          <!-- Fila de filtros por columna estilo Excel -->
+          <tr class="filter-row">
+            <th>
+              <input form="form-filtros" type="text" name="anno" value="{{ filtros.anno }}" placeholder="Filtrar año...">
+            </th>
+            <th>
+              <input form="form-filtros" type="text" name="trimestre" value="{{ filtros.trimestre }}" placeholder="Filtrar trim...">
+            </th>
+            <th>
+              <input form="form-filtros" type="text" name="proveedor" value="{{ filtros.proveedor }}" placeholder="Filtrar proveedor...">
+            </th>
+            <th>
+              <input form="form-filtros" type="text" name="proveedor_destino" value="{{ filtros.proveedor_destino }}" placeholder="Filtrar destino...">
+            </th>
+            <th>
+              <input form="form-filtros" type="text" name="trafico_prepago" value="{{ filtros.trafico_prepago }}" placeholder="Filtrar prepago...">
+            </th>
+            <th>
+              <input form="form-filtros" type="text" name="trafico_pospago" value="{{ filtros.trafico_pospago }}" placeholder="Filtrar pospago...">
+            </th>
+          </tr>
+        </thead>
+        <tbody id="table-body-target">
+          {% for fila in registros %}
+            <tr>
+              <td>{{ fila.anno }}</td>
+              <td>{{ fila.trimestre }}</td>
+              <td>{{ fila.proveedor }}</td>
+              <td>{{ fila.proveedor_destino }}</td>
+              <td class="text-right">{{ fila.trafico_prepago }}</td>
+              <td class="text-right">{{ fila.trafico_pospago }}</td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="6" class="empty-state-cell">
+                <div class="empty-state-content">
+                  <div class="empty-state-text">No hay datos disponibles para mostrar</div>
+                  <div class="empty-state-subtext">No se encontraron registros con los filtros aplicados.</div>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-footer-bar">
+      <div class="sync-status">
+        <span class="status-indicator-dot"></span>
+        <span>Mostrando {{ registros|length }} registros sincronizados</span>
+      </div>
+      <div class="telemetry-status">
+        Fuente: datos.gov.co · s5df-6cb7 &nbsp;•&nbsp; Sincronización automática y manual
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
